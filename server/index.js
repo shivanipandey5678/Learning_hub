@@ -5,9 +5,12 @@ import cors from 'cors';
 import {connectDb} from './config/db.js';
 import connectCloudinary from './config/cloudinary.js';
 import authRouter from './routes/authRouter.js';
+// Add this after your auth routes
+import courseRouter from './routes/courseRouter.js';
 const app=express();
 const port = process.env.PORT ;
 
+app.use('/api/v1', courseRouter);
 
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
