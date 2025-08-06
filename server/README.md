@@ -110,4 +110,56 @@
 | `POST` | `/api/auth/is-authenticated` | Check if token is valid     |
 
 ---
+//shivani register mei hi phle rakhna hoga verify email fir success hoga registration
 
+🛠️ Recent Updates
+✅ Admin Login Route Added
+Created a dedicated route for admin login:
+POST /api/v1/auth/admin-login
+
+Authenticates using credentials stored in environment variables.
+
+On success, generates a secure atoken cookie for admin session.
+
+✅ Fixed req.body Undefined Issue
+Confirmed express.json() is loaded early in server.js.
+
+All routes now correctly receive JSON payloads in the request body.
+
+✅ User Profile Update Endpoint
+Added support to update authenticated user's profile via:
+PATCH /api/v1/users/update
+
+Supports updating name, bio, and profilePicture.
+
+✅ User Deletion Endpoint
+Authenticated users can now delete their accounts via:
+DELETE /api/v1/users/delete
+
+## ✅ Phase 2 Updates
+
+### 🧩 MongoDB & Postman Team Collaboration
+- MongoDB Atlas configured for multi-developer use.
+- Connection string shared securely via `.env`.
+- Postman team workspace created for API collaboration.
+- Enabled network access and created DB users for teammates.
+
+### 👤 User Model Updated
+- Added fields: `profilePicture`, `bio`, `role`, `enrolledCourses`, `completedCourses`.
+- Enhanced schema to support course interactions and profile info.
+
+### 📦 Multer Configured for File Uploads
+- Configured `multer` for handling profile picture uploads.
+- Setup middleware to store files with unique naming.
+
+### 🛡️ Admin Middleware Setup
+- Created `adminAuth.js` to protect admin-specific routes.
+- Uses environment credentials for secure admin login.
+
+### 🧑‍💻 User Routes (CRUD)
+- Created `userRouter.js` for user-related functionality:
+  - `GET /me` → Fetch current user
+  - `PATCH /update` → Update user profile
+  - `DELETE /delete` → Delete user account
+
+> 💡 All new routes are protected with token-based `Auth` middleware.

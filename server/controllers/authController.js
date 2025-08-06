@@ -2,29 +2,72 @@ import jwt from 'jsonwebtoken';
 import User from '../models/userModels.js'
 import bcrypt from 'bcrypt';
 import transporter from '../config/nodemailer.js';
+import validator from 'validator';
+import {v2 as cloudinary} from 'cloudinary';
 import { Registration_Template, passwordResetEmail, accountVerifyEmail, Password_Changed_Template, Email_Verification_Template } from '../config/emailTemplate.js';
 
 const tokenGenerater = async (id) => {
-    console.log("tokenGenerater", process.env.JWT_ACCESS_TOKEN)
+    // console.log("tokenGenerater", process.env.JWT_ACCESS_TOKEN)
     let token = jwt.sign({ userId: id }, process.env.JWT_ACCESS_TOKEN, { expiresIn: '7d' })
-    console.log("tokenGenerater token", token)
+    // console.log("tokenGenerater token", token)
     return token
 }
 
+const adminTokenGenerater = async() => {
+    return jwt.sign(
+      { role: 'admin' }, 
+      process.env.JWT_ACCESS_TOKEN,
+      { expiresIn: '7d' }
+    );
+  };
+
+
 const register = async (req, res) => {
-    const { name, email, password } = req.body;
+    const { name, email, password ,bio} = req.body;
+    // 🔍 Required checks
     if (!name || !email || !password) {
         return res.status(400).json({ message: "Please provide complete information", success: false });
     }
+
+      //validating input
+      if (!validator.isEmail(email)) {
+        return res.status(400).json({ message: 'Please provide correct email' });
+
+    }
+    //checking length of password
+    if (password.length < 8) {
+        return res.status(400).json({ success: false, message: 'Password must be at least 8 characters long' })
+
+    }
+
+    //checking for strong password
+    const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+    if (!strongPasswordRegex.test(password)) {
+            return res.status(400).json({ success: false, message: "Password must include uppercase, lowercase, number, and special character" })
+    }
     try {
-        const allUser = await User.find({});
+       
         const existUser = await User.findOne({ email });
         if (existUser) {
             return res.status(400).json({ message: "User already exists!", success: false });
         }
+        //hash password
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
-        let newUser = new User({ name, password: hashedPassword, email });
+
+        //profile upload 
+        let profileImageUrl='';
+        if(req.files?.profileImage?.[0]){
+            let result=await cloudinary.uploader.upload(req.files.profileImage[0].path,{resource_type:'image'});
+            profileImageUrl=result.secure_url;
+        }
+        
+        // 🧾 Create user
+       
+
+
+        let newUser = new User({ name, password: hashedPassword, email ,profilePicture:profileImageUrl,bio:bio || ''});
         newUser = await newUser.save();
 
         const token = await tokenGenerater(newUser._id);
@@ -250,7 +293,35 @@ const resetPassword = async (req, res) => {
     }
 }
 
-export { register, login, logout, sendVerificationEmailOtp, verifyEmail, isAuthenticated, sendResetOtp, resetPassword }
+const adminLogin =async(req,res) => {
+
+try {
+       
+        const {email,password}=req.body;
+        if (!email || !password) {
+            return res.status(400).json({ message: "Please provide both email and password.", success: false })
+        }
+        if(email===process.env.ADMIN_EMAIL && password===process.env.ADMIN_PASSWORD ){
+            const atoken=await adminTokenGenerater();
+            res.cookie('atoken', atoken, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
+                maxAge: 7 * 24 * 60 * 60 * 1000
+            });
+            return res.status(200).json({ message: "Admin login successfully!", success: true })
+        }else{
+            return res.status(400).json({  message: "Invalid admin credentials.", success: false })
+        }
+    } catch (error) {
+        return res.status(500).json({ success: false, message: error.message, hint: "adminLogin" })
+    }
+}
+           
+
+         
+
+export { register, login, logout, sendVerificationEmailOtp, verifyEmail, isAuthenticated, sendResetOtp, resetPassword ,adminLogin}
 
 
 

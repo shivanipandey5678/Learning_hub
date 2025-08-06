@@ -1,6 +1,7 @@
-import  { register, login, logout, sendVerificationEmailOtp, verifyEmail, isAuthenticated ,sendResetOtp ,resetPassword} from '../controllers/authController.js';
+import  { register, login, logout, sendVerificationEmailOtp, verifyEmail, isAuthenticated ,sendResetOtp ,resetPassword ,adminLogin} from '../controllers/authController.js';
 import express from'express';
 import Auth from '../middleware/Auth.js'
+import adminAuth from '../middleware/adminAuth.js';
 const authRouter = express.Router();
 
 
@@ -15,5 +16,6 @@ authRouter.post('/verify-email', Auth, verifyEmail);
 authRouter.post('/is-authenticated', Auth, isAuthenticated);
 authRouter.post('/reset-otp', Auth, sendResetOtp);
 authRouter.post('/reset-password', Auth, resetPassword);
+authRouter.post('/admin-login', adminLogin);
 
 export default authRouter;
