@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import { AppContext } from '../../context/AppContext'
 
 const CoursesSection = () => {
+  const {allCourses}  = useContext(AppContext);
   return (
     <div>
       

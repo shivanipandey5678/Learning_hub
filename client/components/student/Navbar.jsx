@@ -1,22 +1,25 @@
-import React from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { assets } from '../../src/assets/assets';
 import { useClerk, UserButton, useUser } from '@clerk/clerk-react';
+import { AppContext } from '../../context/AppContext';
 const Navbar = () => {
 
   const location = useLocation();
+  const navigate=useNavigate();
+  const {isEducator} =useContext(AppContext);
   const isCourseListPage = location.pathname.includes('/course-list');
   const { openSignIn } = useClerk();
   const { user } = useUser();
   return (
     <div className={`flex items-center justify-between  px-4 sm:px-10 md:px-14 py-1 border-b border-gray-500 ${isCourseListPage ? 'bg-white' : 'bg-cyan-100/70'}`}>
-      <img src={assets.learning_hub_logo} alt="logo" className='w-15 lg:w-20 cursor-pointer' />
+      <img src={assets.learning_hub_logo} alt="logo" className='w-15 lg:w-20 cursor-pointer' onClick={()=>navigate("/")}/>
       {/* bigger screen */}
       <div className='hidden md:flex  gap-5 items-center  text-gray-500'>
         {user && (
           <div className="flex items-center gap-3 text-gray-700">
-            <button className="hover:underline">Become Educator</button>
+            <button className="hover:underline" onClick={()=>{navigate('/educator')}}>{isEducator?'Educator Dashboard':'Become Educator'}</button>
             <span>|</span>
             <Link to="/my-enrollments" className="hover:underline">My Enrollments</Link>
           </div>
@@ -32,7 +35,7 @@ const Navbar = () => {
 
         {user && (
           <div className="flex items-center gap-2 text-gray-700 text-sm">
-            <button className="hover:underline">Become Educator</button>
+            <button className="hover:underline" onClick={()=>{navigate('/educator')}}>{isEducator?'Educator Dashboard':'Become Educator'}</button>
             <span>|</span>
             <Link to="/my-enrollments" className="hover:underline">My Enrollments</Link>
           </div>

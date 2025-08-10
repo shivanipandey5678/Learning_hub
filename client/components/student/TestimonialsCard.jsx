@@ -15,13 +15,13 @@ const TestimonialsCard = ({name,role,image,feedback,rating}) => {
         <div className='p-3 flex flex-col gap-2'>
 
         <div className='flex gap-1'>
-               {[...Array(rating)].map((_,i)=>(
-                <img src={assets.star} alt="star" />
+               {[...Array(5)].map((_,i)=>(
+                <img  alt="star" className='h-5' key={i} src={i<Math.floor(rating)? assets.star : assets.star_blank}/>
                ))}
               
         </div>
         <p className='text-sm text-gray-600'>{feedback}</p>
-        <p className='text-[#1C70FF] underline mt-4 cursor-pointer'>Read more</p>
+        <p className='text-[#1C70FF] underline mt-4 cursor-pointer' onClick={()=>scroll(0,0)}>Read more</p>
        
         </div>
     </div>

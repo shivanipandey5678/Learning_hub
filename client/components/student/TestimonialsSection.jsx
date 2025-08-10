@@ -7,7 +7,7 @@ const TestimonialsSection = () => {
     <div className='my-20 flex flex-col items-center gap-4'>
        <p className=' font-semibold text-2xl'>Testimonials</p>
        <p className='text-[#565656] text-sm sm:w-1/2 text-center w-[80%]'>Hear from our learners as they share their journeys of transformation, success, and how our platform has made a difference in their lives.</p>
-       <div className='flex flex-wrap gap-4 w-[80%] mx-auto mb-26 mt-5 justify-center'>
+       <div className='flex flex-wrap gap-4 w-[80%] mx-auto mb-26 mt-5 md:justify-start justify-center'>
 
           {dummyTestimonial.slice(0,3).map((item,i)=>(
             <TestimonialsCard {...item} key={i}/>

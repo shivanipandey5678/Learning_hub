@@ -19,10 +19,10 @@ const Footer = () => {
        {/* second block */}
        <div className='flex flex-col gap-4 items-start list-none md:w-[20%]'>
            <p className='mb-1 text-semibold text-white'>Company</p>
-           <li >Home</li>
-           <li>About us</li>
-           <li>Contact us</li>
-           <li>Privacy policy</li>
+           <li ><a href="#">Home</a></li>
+           <li><a href="#">About us</a></li>
+           <li><a href="#">Contact us</a></li>
+           <li><a href="#">Privacy policy</a></li>
        </div>
 
        {/* third block */}
