@@ -63,7 +63,7 @@ const Players = () => {
                                 <img src={false?assets.blue_tick_icon:assets.play_icon} alt="play_icon" className='h-3 mt-1' />
                                 <div className='flex items-center justify-between w-full text-gray-800 text-xs md:text-default'>
                                   <p className=''>{lecture.lectureTitle}</p>
-                                  <div>
+                                  <div className='flex gap-2'>
                                     {lecture.lectureUrl && <p className='text-blue-500 cursor-pointer ' onClick={()=>setPlayerData({...lecture,chapter:index+1 ,lecture:i+1})}>Watch</p>}
                                     <p>{humanizeDuration(lecture.lectureDuration * 60 * 1000, { units: ['h', 'm'] })}</p>
                                   </div>
@@ -87,11 +87,11 @@ const Players = () => {
        {/* right column */}
        <div className='md:mt-10'>
         {
-          playerData?(<div className='w-[100%]'>
+          playerData?(<div >
             <YouTube videoId={playerData.lectureUrl.split('/').pop()} iframeClassName='w-full aspect-video'/>
             <div className='flex justify-between items-center mt-1'>
               <p>{playerData.chapter}.{playerData.lecture} {playerData.lectureTitle}</p>
-              <button className='text-blue-600'>{false? 'Colpleted':'Mark Complete'}</button>
+              <button className='text-blue-600'>{false? 'Completed':'Mark Complete'}</button>
             </div>
           </div>): <img src={courseData?  courseData.courseThumbnail:''} alt="" />
         }

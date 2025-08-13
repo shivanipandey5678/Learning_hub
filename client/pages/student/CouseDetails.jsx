@@ -34,8 +34,8 @@ const CouseDetails = () => {
 
   return courseData ? (
     <>
-      <div className='flex md:flex-row flex-col-reverse gap-10 relative items-start justify-between md:px-36 px-8 md:pt-30 pt-20 text-left'>
-        <div className='absolute top-0 left-0 w-full h-[100%] -z-1 bg-gradient-to-b from-cyan-100/70'></div>
+      <div className='flex md:flex-row flex-col-reverse gap-10 relative items-start justify-between md:px-26 px-8 md:pt-30 pt-20 text-left'>
+        <div className='absolute top-0 left-0 w-full h-[100%] -z-1 bg-gradient-to-b from-cyan-100/70 to-white'></div>
         {/* left column */}
         <div className='max-w-xl text-gray-500 z-10'>
           <h1 className='md:text-3xl text-2xl font-semibold text-gray-800'>{courseData.courseTitle}</h1>
@@ -85,7 +85,7 @@ const CouseDetails = () => {
                           <img src={assets.play_icon} alt="play_icon" className='h-3 mt-1' />
                           <div className='flex items-center justify-between w-full text-gray-800 text-xs md:text-default'>
                             <p className=''>{lecture.lectureTitle}</p>
-                            <div>
+                            <div className='flex gap-2'>
                               {lecture.isPreviewFree && <p className='text-blue-500 cursor-pointer ' onClick={()=>setPlayerData({videoId:lecture.lectureUrl.split('/').pop()})}>Preview</p>}
                               <p>{humanizeDuration(lecture.lectureDuration * 60 * 1000, { units: ['h', 'm'] })}</p>
                             </div>
